@@ -1,4 +1,4 @@
-import streamlit as st
+"""import streamlit as st
 from textblob import TextBlob
 from googletrans import Translator
 
@@ -9,13 +9,13 @@ st.subheader("Por favor escribe en el campo de texto la frase que deseas analiza
 with st.sidebar:
                st.subheader("Polaridad y Subjetividad")
                ("""
-                Polaridad: Indica si el sentimiento expresado en el texto es positivo, negativo o neutral. 
+                """Polaridad: Indica si el sentimiento expresado en el texto es positivo, negativo o neutral. 
                 Su valor oscila entre -1 (muy negativo) y 1 (muy positivo), con 0 representando un sentimiento neutral.
                 
                Subjetividad: Mide cuánto del contenido es subjetivo (opiniones, emociones, creencias) frente a objetivo
                (hechos). Va de 0 a 1, donde 0 es completamente objetivo y 1 es completamente subjetivo.
 
-                 """
+                 """ """
                ) 
 
 
@@ -43,4 +43,56 @@ with st.expander('Corrección en inglés'):
        text2 = st.text_area('Escribe por favor: ',key='4')
        if text2:
           blob2=TextBlob(text2)
-          st.write((blob2.correct())) 
+          st.write((blob2.correct())) """
+import streamlit as st
+from textblob import TextBlob
+from googletrans import Translator
+
+translator = Translator()
+st.title('Uso de textblob')
+
+st.subheader("Por favor escribe en el campo de texto la frase que deseas analizar")
+with st.sidebar:
+    st.subheader("Polaridad y Subjetividad")
+    st.markdown("""
+    **Polaridad:** Indica si el sentimiento expresado en el texto es positivo, negativo o neutral. 
+    Su valor oscila entre -1 (muy negativo) y 1 (muy positivo), con 0 representando un sentimiento neutral.
+
+    **Subjetividad:** Mide cuánto del contenido es subjetivo (opiniones, emociones, creencias) frente a objetivo
+    (hechos). Va de 0 a 1, donde 0 es completamente objetivo y 1 es completamente subjetivo.
+    """)
+
+with st.expander('Analizar Polaridad y Subjetividad en un texto'):
+    text1 = st.text_area('Escribe por favor: ')
+    if text1:
+        # Traducción del español al inglés
+        translation = translator.translate(text1, src="es", dest="en")
+        trans_text = translation.text
+        
+        # Análisis de sentimiento
+        blob = TextBlob(trans_text)
+        polarity = blob.sentiment.polarity
+        subjectivity = blob.sentiment.subjectivity
+        
+        # Mostrar resultados en español
+        st.write('Polaridad:', round(polarity, 2))
+        st.write('Subjetividad:', round(subjectivity, 2))
+        
+        # Determinar el sentimiento en español
+        if polarity >= 0.5:
+            sentiment = 'Es un sentimiento Positivo 😊'
+        elif polarity <= -0.5:
+            sentiment = 'Es un sentimiento Negativo 😔'
+        else:
+            sentiment = 'Es un sentimiento Neutral 😐'
+        
+        # Traducir el sentimiento al español
+        sentiment_translated = translator.translate(sentiment, src="en", dest="es").text
+        st.write(sentiment_translated)
+
+with st.expander('Corrección en inglés'):
+    text2 = st.text_area('Escribe por favor:', key='4')
+    if text2:
+        blob2 = TextBlob(text2)
+        st.write(blob2.correct())
+
