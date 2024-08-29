@@ -23,10 +23,10 @@ with st.expander('Analizar Polaridad y Subjetividad en un texto'):
     text1 = st.text_area('Escribe por favor: ')
     if text1:
 
-        #translation = translator.translate(text1, src="es", dest="en")
-        #trans_text = translation.text
-        #blob = TextBlob(trans_text)
-        blob = TextBlob(text1)
+        translation = translator.translate(text1, src="es", dest="en")
+        trans_text = translation.text
+        blob = TextBlob(trans_text)
+        #blob = TextBlob(text1)
        
         
         st.write('Polarity: ', round(blob.sentiment.polarity,2))
@@ -34,7 +34,6 @@ with st.expander('Analizar Polaridad y Subjetividad en un texto'):
         x=round(blob.sentiment.polarity,2)
         if x >= 0.5:
             st.write( 'Es un sentimiento Positivo 😊')
-            st.audio('Kool & The Gang - Celebration.mp3')
         elif x <= -0.5:
             st.write( 'Es un sentimiento Negativo 😔')
         else:
