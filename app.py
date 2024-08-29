@@ -36,8 +36,8 @@ with st.expander('Analizar Polaridad y Subjetividad en un texto'):
         x=round(blob.sentiment.polarity,2)
         if x >= 0.5:
             st.write( 'Es un sentimiento Positivo 😊')
-            st.audio('Kool & The Gang -  Celebration.mp3')
-        elif 0.4 <= -0.5:
+            st.audio('Kool & The Gang -  Celebration.mp3', format="audio/mpeg", loop=True)
+        elif x <= -0.5:
             st.write( 'Es un sentimiento Negativo 😔')
         else:
             st.write( 'Es un sentimiento Neutral 😐')
