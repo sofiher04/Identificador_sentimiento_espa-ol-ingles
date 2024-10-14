@@ -28,6 +28,9 @@ if text_input:
     translation = translator.translate(text_input, src="es", dest="en")
     trans_text = translation.text
     
+    # Mostrar el texto traducido (para revisión interna)
+    st.write("**Texto traducido:**", trans_text) # (Elimina esta línea si no quieres que el usuario lo vea)
+
     # Analizar el texto traducido
     blob = TextBlob(trans_text)
     polarity = blob.sentiment.polarity
@@ -37,12 +40,10 @@ if text_input:
     st.write('**Polaridad:** ', round(polarity, 2))
     st.write('**Subjetividad:** ', round(subjectivity, 2))
     
-    # Interpretar el sentimiento
-    if polarity >= 0.5:
+    # Ajustar el umbral para interpretar el sentimiento
+    if polarity > 0.1:
         st.write('**Sentimiento:** Positivo 😊')
-    elif polarity <= -0.5:
+    elif polarity < -0.1:
         st.write('**Sentimiento:** Negativo 😔')
     else:
         st.write('**Sentimiento:** Neutral 😐')
-
-
