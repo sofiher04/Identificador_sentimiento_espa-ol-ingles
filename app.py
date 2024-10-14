@@ -1,49 +1,38 @@
 import streamlit as st
 from googletrans import Translator
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-import nltk
+from textblob import TextBlob
 
-# Descargar los datos de VADER (solo necesita hacerse una vez)
-nltk.download('vader_lexicon')
-
-# Inicializar el traductor y VADER
+# Inicializar el traductor
 translator = Translator()
-analyzer = SentimentIntensityAnalyzer()
 
 # Título de la aplicación
-st.title('Análisis de Sentimiento con VADER')
+st.title('Análisis de Sentimiento para Texto en Español')
 
-st.subheader("Escribe una opinión para analizar su sentimiento")
-
-with st.sidebar:
-    st.subheader("Explicación de los resultados")
-    st.write(
-        """
-        - **Positivo**: El texto tiene una connotación positiva.
-        - **Negativo**: El texto tiene una connotación negativa.
-        - **Neutral**: El texto no tiene una fuerte carga emocional.
-        """
-    )
+st.subheader("Escribe una opinión en español para analizar su sentimiento")
 
 # Solicitar entrada de texto al usuario
 text_input = st.text_area('Escribe tu opinión aquí:')
 
 if text_input:
-    # Traducir el texto al inglés
+    # Traducir el texto al inglés internamente
     translation = translator.translate(text_input, src="es", dest="en")
     trans_text = translation.text
     
-    # Analizar el sentimiento del texto traducido con VADER
-    sentiment = analyzer.polarity_scores(trans_text)
+    # Crear un objeto TextBlob con el texto traducido
+    blob = TextBlob(trans_text)
     
-    # Obtener los resultados de la polaridad
-    st.write('**Texto traducido:**', trans_text)
-    st.write('**Polaridad:** ', sentiment['compound'])
+    # Obtener los valores de polaridad y subjetividad
+    polarity = blob.sentiment.polarity
+    subjectivity = blob.sentiment.subjectivity
     
-    # Interpretar el sentimiento
-    if sentiment['compound'] >= 0.05:
-        st.write('**Sentimiento:** Positivo 😊')
-    elif sentiment['compound'] <= -0.05:
-        st.write('**Sentimiento:** Negativo 😔')
+    # Mostrar resultados
+    st.write(f"**Polaridad:** {polarity}")
+    st.write(f"**Subjetividad:** {subjectivity}")
+    
+    # Determinar el sentimiento basado en la polaridad
+    if polarity > 0:
+        st.write("**Sentimiento:** Positivo 😊")
+    elif polarity < 0:
+        st.write("**Sentimiento:** Negativo 😔")
     else:
-        st.write('**Sentimiento:** Neutral 😐')
+        st.write("**Sentimiento:** Neutral 😐")
