@@ -25,14 +25,14 @@ if text_input:
     polarity = blob.sentiment.polarity
     subjectivity = blob.sentiment.subjectivity
     
-    # Mostrar resultados
+    # Mostrar los resultados
     st.write(f"**Polaridad:** {polarity}")
     st.write(f"**Subjetividad:** {subjectivity}")
     
     # Determinar el sentimiento basado en la polaridad
-    if polarity > 0:
+    if polarity > 0.1:  # Ajuste para detectar positivo
         st.write("**Sentimiento:** Positivo 😊")
-    elif polarity < 0:
+    elif polarity < -0.1:  # Ajuste para detectar negativo
         st.write("**Sentimiento:** Negativo 😔")
     else:
         st.write("**Sentimiento:** Neutral 😐")
